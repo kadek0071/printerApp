@@ -1,0 +1,493 @@
+/* // 1 wersja
+
+    //Przekazanie wartosci z login.php
+
+    $username = $_POST['login'];
+    $password = $_POST['pass'];
+
+     //laczenie z serwerem i baza danych
+
+     $link = mysqli_connect('localhost', 'root', '', 'baza_drukarek');
+     //$tabela = mysqli_select_db($link, 'baza_drukarek');
+ 
+     //zapytanie bazy o uzytkownika
+
+     $sql_1 =  "select * from uzytkownicy";
+     $result = mysqli_query($link, $sql_1)
+                     or die("Failed to query databse ".mysqli_error($link));
+     $row = mysqli_fetch_array($result);     
+     if ($row['login'] == $username && $row['haslo'] == $password ){
+         echo "Login sucess! Welcome ".$row['login'];
+     }else{
+         echo "Failed to login";
+     }
+    
+    //zabezpieczenia
+
+    $username = stripcslashes($username);
+    $password = stripcslashes($password);
+    $username = mysqli_real_escape_string($link, $username);
+    $password = mysqli_real_escape_string($link, $password);
+
+   //zahaszowac hasla!!!!!!!!
+
+*/
+
+
+<?php
+    include_once '../FILE_END/header.php';
+?>
+
+<?php
+    include_once '../FILE_END/footer.php';
+?>
+
+<?php
+							if (isset($_GET["error"])){
+								if($_GET["error"] == "emptyinput"){
+									echo "Wypełnij pola";
+								}
+								else if($_GET["error"] == "invalidlogin"){
+									echo "Wybierz prawidłowy login";
+								}
+								else if($_GET["error"] == "invalidemail"){
+									echo "Wybierz prawidłowy email";
+								}
+								else if($_GET["error"] == "passwordsdontmatch"){
+									echo "Hasła nie pasują";
+								}
+								else if($_GET["error"] == "stmtfailed"){
+									echo "Coś poszło nie tak";
+								}
+								else if($_GET["error"] == "logintaken"){
+									echo "Login zajęty";
+								}
+								else if($_GET["error"] == "none"){
+									echo "Rejestracja pomyślna";
+								}
+							}
+						?>
+
+//DATABASE
+
+create table drukarki (
+  id int(11) not null PRIMARY KEY AUTO_INCREMENT,
+  model varchar(100) not null, 
+  firma varchar(50) not null,
+  rodzaj varchar(30) not null, 
+  predkosc_wydruku int(5) not null,
+  pojemnosc int(5) not null,
+  date datetime not null  
+);
+
+create table uzytkownicy (
+  id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  nazwa varchar(128) NOT NULL,
+  login varchar(128) NOT NULL,
+  email varchar(128) NOT NULL,
+  haslo varchar(128) NOT NULL,
+  klucz_weryfikacyjny varchar(128) NOT NULL,
+
+);
+
+CREATE TABLE reset_hasla (
+    id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    email TEXT NOT NULL,
+    selektor TEXT NOT NULL,
+    token LONGTEXT NOT NULL,
+    data_wygasniecia TEXT NOT NULL
+);
+
+
+//////////////////////
+
+
+.data-pad-content{
+  margin-top: 3rem;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+}
+
+.printer{ 
+  width: 100%;
+  min-height: 5rem;
+  padding: 1rem;
+  margin: 1rem;
+  display: flex;
+  flex-flow: row wrap;
+  background-color: red;
+}
+
+.printer>* {
+  flex: 1 1 15%;
+}
+
+.printer p, h4{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem;
+  min-height: 5rem;
+  min-width: 15rem;
+  background-color: #189582;
+}
+
+  <div class="data-pad">
+
+        <form action="DATABASE_HAND/search.php" class="search-box" method="POST">
+            <input type="text" name="search" placeholder="Szukaj">
+            <button type="submit" class="btn-search" name="submit-search">Szukaj</button>
+        </form>
+
+        <div class="data-pad-content">
+
+            <?php
+
+            $sql = "SELECT * FROM drukarki";
+            $result = mysqli_query($conn, $sql);
+            $queryResults = mysqli_num_rows($result);
+
+            if($queryResults > 0){
+                while($row = mysqli_fetch_assoc($result)){
+                    echo "<div class='printer'>
+
+                            <h4>".$row['model']."</h4>
+                            <p>".$row['firma']."</p>
+                            <p>".$row['rodzaj']."</p>
+                            <p>".$row['predkosc_wydruku']."</p>
+                            <p>".$row['pojemnosc']."</p> 
+
+                          </div>";
+                }
+            }
+
+           
+              
+
+            ?>
+            
+        </div>
+
+    </div>
+
+
+
+
+
+///////////////////////
+
+
+
+.data-pad{
+  position: relative;
+  width: 95%;
+  height: 100%;
+  background-color: rgba(36, 36, 36, 0.3);
+  margin-top: 1rem;
+  box-shadow: 0px 0px 13px 3px rgba(26, 26, 26, 0.6);
+  padding: 2rem;
+  color: #fff;
+}
+
+
+
+////////////////////////
+
+ <div class="accordion">
+                    <div class="accordion-item">
+                        <a class="accordion-link">
+                            <div>Siema</div>
+                            <i class="fas fa-plus"></i>
+                        </a>
+                        <div class="answer">
+                            <table>                               
+                                <tr>
+                                    <th>
+                                        <p>
+                                    Szybkość wydruku
+                                        </p>
+                                    </th>
+                                    <td>
+                                        <p>
+                                    Loremggggggg   ggghhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhh
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <p>
+                                        Ilość
+                                        </p>
+                                    </th>
+                                    <td>
+                                        <p>
+                                    Lorem iponsectehhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhh
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <p>
+                                    Lorem ipmint. elo
+                                        </p>
+                                    </th>
+                                    <td>
+                                        <p>
+                                    Lorem iponsectehhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhh
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>        
+
+/////////////////////////////
+
+
+array(7) { [0]=> string(1) "1" [1]=> string(5) "extra" [2]=> string(7) "samsung" [3]=> string(9) "zajebisty" [4]=> string(3) "100" [5]=> NULL [6]=> string(19) "2021-03-31 15:01:07" }
+
+array(7) { [0]=> string(1) "1" [1]=> string(5) "extra" [2]=> string(7) "samsung" [3]=> string(9) "zajebisty" [4]=> string(3) "100" [5]=> NULL [6]=> string(19) "2021-03-31 15:01:07" } 
+
+//////////////////////////////////////////
+
+
+
+if(mysqli_num_rows($result) > 0){ 
+                                           
+                        while($row = mysqli_fetch_assoc($result)){
+
+                            $arrayLength = count($row);
+                            $keys = array_keys($row);
+                            $i = 2;
+                            echo var_dump($row);
+                            echo "<br><br>";
+                            echo var_dump($keys);
+
+                            echo"
+
+                                <div class='accordion'>
+                                <div class='accordion-item'>
+                                    <a class='accordion-link'>
+                                        <div>".$row[''.$keys[1].'']."</div>
+                                        <i class='fas fa-plus'></i>
+                                    </a>
+                                    <div class='answer'>
+                                        <table>  
+                                        ";
+                                        while($i < $arrayLength){
+                                            echo"
+
+                                            <tr>
+                                                <th>
+                                                    <p>
+                                                ".$keys[$i]."
+                                                    </p>
+                                                </th>
+                                                <td>
+                                                    <p>
+                                                ".$row[''.$keys[$i].'']."
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            
+                                            ";
+                                            $i++;
+                                        }
+                                        
+                                        echo"
+                                        </table>
+                                    </div>
+                                </div>
+                                </div>      
+                            
+                            
+                            ";
+
+
+
+                        }
+
+                    } else{
+                        echo "Nie ma!";
+                    }
+
+
+        //////////////////////////////////
+
+
+ <div class="container" id="main-container">
+
+                <?php
+
+                    $sql = "SELECT * FROM drukarki LIMIT 2";
+                    $result = mysqli_query($conn, $sql);
+                    if(mysqli_num_rows($result) > 0){ 
+                                           
+                        while($row = mysqli_fetch_assoc($result)){
+
+                            $arrayLength = count($row);
+                            $keys = array_keys($row);
+                            $i = 2;
+                            //echo var_dump($row);
+                            //echo "<br><br>";
+                            //echo var_dump($keys);
+
+                            echo"
+
+                                <div class='accordion'>
+                                <div class='accordion-item'>
+                                    <a class='accordion-link'>
+                                        <div>".$row[''.$keys[1].'']."</div>
+                                        <i class='fas fa-plus'></i>
+                                    </a>
+                                    <div class='answer'>
+                                        <table>  
+                                        ";
+
+                                        while($i < $arrayLength-1){                                           
+
+                                            echo"
+
+                                            <tr>
+                                                <th>
+                                                    <p>
+                                                ".$keys[$i]."
+                                                    </p>
+                                                </th>
+                                                <td>
+                                                    <p>
+                                                ".$row[''.$keys[$i].'']."
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            
+                                            ";
+                                            $i++;
+                                        }                                        
+                                        echo"
+
+                                        </table>
+                                    </div>
+                                </div>
+                                </div>                            
+                            ";
+                        }
+
+                    } else{
+                        echo "Nie ma!";
+                    }
+                
+                ?>
+
+                <button id="see-more-content">Zobacz więcej</button>
+
+            </div>
+
+
+////////////////////////////
+
+ position: absolute; 
+  padding: 0 1.5rem;
+  color: #fff;
+  background-color: #7cba45;
+  border: none;
+  outline: none;
+  border-radius: 4px 4px 0 0;    
+  height: 2.5rem;
+  top: -2.5rem;
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////
+
+CREATE DEFINER=`my_procedure`@`%` PROCEDURE `rescue`()
+BEGIN
+    declare str VARCHAR(255) default '';
+    DECLARE n INT DEFAULT 0;
+    DECLARE i INT DEFAULT 0;
+    DECLARE cur_name VARCHAR(45) DEFAULT '';
+    DECLARE cur_value VARCHAR(10000) DEFAULT '';
+    SELECT COUNT(*) FROM tableA INTO n;
+    SET i=0;
+    WHILE i<n DO 
+      SELECT namea,valuea FROM tableA limit i,1 INTO cur_name,cur_value;
+      UPDATE tableB SET nameb=cur_name where valueb=cur_value;
+      SET i = i + 1;
+    END WHILE;
+
+END
+
+//////////////////////
+
+else {
+                
+                if(search === null || search.match(/^ *$/) !== null){
+
+                }
+                
+            }
+
+///////////////////////////////
+
+
+function updateFormArrays(){
+
+	////Update Form Arrays
+	
+	let formContentArrayTmp = [];
+	let formContentArrayTmp2 = [];
+	let formContentArray = [];
+	let i = 0;
+	let formId;
+
+	function checkForDuplicates(array, keyName) {
+		return new Set(array.map(item => item[keyName])).size !== array.length;
+	}
+
+	function hasDuplicates(array) {
+		return (new Set(array)).size !== array.length;
+	}
+    
+
+	formContent.data('serializeContent').split('&').forEach(function(elem, index) {
+
+			let vals = elem.split('=');
+			formContentArrayTmp = formContentArrayTmp.concat(vals);
+			
+			if(!hasDuplicates(formContentArrayTmp)){
+
+				formContentArrayTmp2.push({"name" : vals[0], "value" : vals[1]});
+				formContentArray[i] = formContentArrayTmp2;
+				
+				if(vals[0] === "content_id"){
+					formId = formContent[i].id;
+					formContentArrayTmp2.unshift({"formId" : formId});
+				}	
+
+			}else{
+				formContentArray[i] = formContentArrayTmp2;			
+				formContentArrayTmp = [];
+				formContentArrayTmp2 = [];
+				formContentArrayTmp = formContentArrayTmp.concat(vals);
+				formContentArrayTmp2.push({"name" : vals[0], "value" : vals[1]});		
+				i++;			
+			}
+
+	});
+
+	return formContentArray;
+
+}
+
+
+
+   
